@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#e67e22">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Retrait Cash">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Retrait Cash Pro</title>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIiBmaWxsPSIjMmQyZDJkIi8+PHRleHQgeD0iNTAiIHk9IjUwIiBmb250LXNpemU9IjQ0IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2U2N2UyMiI+JDwvdGV4dD48L3N2Zz4=">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .container { max-width: 480px; margin: 0 auto; }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
+      border-radius: 15px;
+      border: 1px solid #444;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .header h1 {
+      color: #f39c12;
+      font-size: 22px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .header p {
+      color: #888;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section {
+      background: #2d2d2d;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+      border: 1px solid #3a3a3a;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .section-titre {
+      color: #f39c12;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e67e22;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #ccc;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .label-info {
+      font-size: 11px;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 14px;
+      background: #1e1e1e;
+      border: 2px solid #444;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.2s;
+      margin-bottom: 5px;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #e67e22;
+      box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .badge.simple { background: #1abc9c; color: white; }
+    .badge.complement { background: #3498db; color: white; }
+    .badge.inverse { background: #9b59b6; color: white; }
+
+    .instruction-box {
+      background: linear-gradient(135deg, #e67e22, #d35400);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(230, 126, 34, 0.3);
+      display: none;
+    }
+    .instruction-box.actif {
+      display: block;
+      animation: slideIn 0.4s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .instruction-titre {
+      color: white;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 10px 0 12px 0;
+      text-align: center;
+    }
+    .instruction-message {
+      background: rgba(0,0,0,0.3);
+      padding: 15px;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      line-height: 1.8;
+      font-weight: 500;
+    }
+    .instruction-message strong {
+      color: #f1c40f;
+      font-size: 17px;
+    }
+    .instruction-message .ligne {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .instruction-message .ligne:last-child {
+      border-bottom: none;
+    }
+    .instruction-message .ligne.total {
+      background: rgba(255,255,255,0.15);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      text-align: center;
+      border: 2px solid #f1c40f;
+    }
+
+    .resultats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .resultat-card {
+      background: linear-gradient(135deg, #1e1e1e, #252525);
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #3a3a3a;
+      text-align: center;
+    }
+    .resultat-card.full { grid-column: 1 / -1; }
+    .resultat-emoji {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    .resultat-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .resultat-valeur {
+      font-size: 18px;
+      font-weight: bold;
+      color: #f1c40f;
+    }
+    .resultat-card.lancer .resultat-valeur { color: #3498db; font-size: 22px; }
+    .resultat-card.cash .resultat-valeur { color: #e67e22; font-size: 22px; }
+    .resultat-card.complete .resultat-valeur { color: #2ecc71; }
+    .resultat-card.donner .resultat-valeur { color: #2ecc71; font-size: 22px; }
+    .resultat-card.solde-requis .resultat-valeur { color: #9b59b6; font-size: 22px; }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .btn-copier { background: #2980b9; color: white; font-size: 13px; padding: 10px; }
+    .btn-reset { background: #444; color: #ccc; font-size: 13px; padding: 10px; }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #27ae60;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      z-index: 9999;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .historique-liste {
+      max-height: 280px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    .historique-item {
+      background: #1e1e1e;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 3px solid #e67e22;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .item-haut {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      align-items: center;
+    }
+    .item-bas {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .item-solde { color: #1abc9c; font-weight: bold; }
+    .item-souhaite { color: #2ecc71; font-weight: bold; }
+    .item-lancer { color: #3498db; font-weight: bold; }
+    .item-cash { color: #e67e22; font-weight: bold; }
+    .historique-vide {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-style: italic;
+    }
+    .btn-suppr-item {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>💵 Retrait Cash Pro</h1>
+      <p>Calcul Automatique - Multiples de 50 F</p>
+    </div>
+
+    <div class="section">
+      <div class="section-titre">📥 Informations Client</div>
+
+      <label>💰 Solde Client sur le Compte (F) :</label>
+      <input type="number" inputmode="numeric" id="soldeClient" placeholder="Laisser vide si inconnu" oninput="calculer()">
+
+      <label style="margin-top:10px;">💵 Montant Souhaité par le Client (F) :</label>
+      <input type="number" inputmode="numeric" id="montantSouhaite" placeholder="Laisser vide pour tout retirer" oninput="calculer()">
+      <div class="label-info">💡 Tu peux remplir l'un ou l'autre, ou les deux</div>
+    </div>
+
+    <div class="instruction-box" id="instructionBox">
+      <div style="text-align:center;">
+        <span class="badge" id="modeBadge">Mode</span>
+      </div>
+      <div class="instruction-titre">📋 Procédure de Retrait</div>
+      <div class="instruction-message" id="instructionMessage"></div>
+    </div>
+
+    <div class="section" id="sectionResultats" style="display:none;">
+      <div class="section-titre">✅ Résumé des Montants</div>
+
+      <div class="resultats-grid">
+        <div class="resultat-card lancer">
+          <div class="resultat-emoji">📱</div>
+          <div class="resultat-label">À Lancer</div>
+          <div class="resultat-valeur" id="resLancer">— F</div>
+        </div>
+        <div class="resultat-card complete" id="cardComplete">
+          <div class="resultat-emoji">➕</div>
+          <div class="resultat-label">À Compléter</div>
+          <div class="resultat-valeur" id="resComplete">— F</div>
+        </div>
+        <div class="resultat-card solde-requis full" id="cardSoldeRequis" style="display:none;">
+          <div class="resultat-emoji">💰</div>
+          <div class="resultat-label">Solde Nécessaire sur le Compte</div>
+          <div class="resultat-valeur" id="resSoldeRequis">— F</div>
+        </div>
+        <div class="resultat-card cash full">
+          <div class="resultat-emoji">🪙</div>
+          <div class="resultat-label">Total Cash à Prendre au Client</div>
+          <div class="resultat-valeur" id="resCash">— F</div>
+        </div>
+        <div class="resultat-card donner full">
+          <div class="resultat-emoji">💵</div>
+          <div class="resultat-label">À Donner au Client</div>
+          <div class="resultat-valeur" id="resDonner">— F</div>
+        </div>
+      </div>
+
+      <button class="btn btn-copier" onclick="copierTout()">📋 Copier les Montants</button>
+    </div>
+
+    <div class="section" id="sectionHistorique" style="display:none;">
+      <div class="section-titre">📜 Historique</div>
+      <div class="historique-liste" id="historiqueListe">
+        <div class="historique-vide">Aucun calcul pour l'instant</div>
+      </div>
+      <button class="btn btn-reset" onclick="effacerHistorique()">🗑️ Effacer l'historique</button>
+    </div>
+
+    <div id="sectionBoutons" style="display:none;">
+      <button class="btn btn-reset" onclick="reinitialiser()">⏹️ Nouveau Calcul</button>
+    </div>
+
+  </div>
+
+  <script>
+    const FRAIS_OPERATEUR = 0.01;
+    const FRAIS_MAGASIN = 100;
+    const ARRONDI = 50;
+    let historique = [];
+
+    function formaterNombre(n) {
+      return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    function afficherToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2000);
+    }
+
+    function copier(texte) {
+      navigator.clipboard.writeText(texte).then(() => afficherToast('✅ Copié !'));
+    }
+
+    function cacherTout() {
+      document.getElementById('sectionResultats').style.display = 'none';
+      document.getElementById('instructionBox').classList.remove('actif');
+      document.getElementById('sectionBoutons').style.display = 'none';
+      document.getElementById('sectionHistorique').style.display = 'none';
+    }
+
+    function calculer() {
+      const soldeStr = document.getElementById('soldeClient').value;
+      const souhaiteStr = document.getElementById('montantSouhaite').value;
+
+      const solde = soldeStr && parseFloat(soldeStr) > 0 ? parseFloat(soldeStr) : null;
+      const souhaite = souhaiteStr && parseFloat(souhaiteStr) > 0 ? parseFloat(souhaiteStr) : null;
+
+      // Si aucun champ rempli, on cache tout
+      if (!solde && !souhaite) {
+        cacherTout();
+        return;
+      }
+
+      // ===== CAS 3 : Solde VIDE + Souhaité rempli =====
+      // On calcule combien le client doit avoir sur le compte
+      if (!solde && souhaite) {
+        calculerModeInverse(souhaite);
+        return;
+      }
+
+      // ===== CAS 2 : Solde rempli + Souhaité VIDE =====
+      // On retire tout ce qu'on peut depuis le solde
+      if (solde && !souhaite) {
+        calculerModeRetraitTotal(solde);
+        return;
+      }
+
+      // ===== CAS 1 : Les deux champs sont remplis =====
+      // On utilise la logique avec frais sur solde
+      calculerModeNormal(solde, souhaite);
+    }
+
+    // ===== MODE 1 : Solde + Souhaité =====
+    function calculerModeNormal(solde, souhaite) {
+      const fraisOp = solde * FRAIS_OPERATEUR;
+      const lancerTheo = solde - fraisOp;
+      const lancerArrondi = Math.floor(lancerTheo / ARRONDI) * ARRONDI;
+
+      let montantALancer, complement, totalCash, montantDonne, message, avecComplement;
+
+      // Si souhaité peut être lancé directement (multiple de 50 et solde suffit)
+      if (souhaite <= lancerArrondi) {
+        // Le client peut recevoir exactement ce qu'il veut
+        montantALancer = Math.floor(souhaite / ARRONDI) * ARRONDI;
+        complement = 0;
+        totalCash = FRAIS_MAGASIN;
+        montantDonne = montantALancer;
+        avecComplement = false;
+
+        message = `
+          <div class="ligne">📱 Tu lances en retrait : <strong>${formaterNombre(montantALancer)} F</strong></div>
+          <div class="ligne">💵 Tu donnes au client : <strong>${formaterNombre(montantDonne)} F</strong></div>
+          <div class="ligne total">🏪 Frais magasin à prendre : <strong style="font-size:22px">${formaterNombre(FRAIS_MAGASIN)} F</strong></div>
+        `;
+      } else {
+        // Le client doit compléter en cash
+        montantALancer = lancerArrondi;
+        complement = souhaite - montantALancer;
+        totalCash = complement + FRAIS_MAGASIN;
+        montantDonne = souhaite;
+        avecComplement = true;
+
+        message = `
+          <div class="ligne">📱 Tu lances en retrait : <strong>${formaterNombre(montantALancer)} F</strong></div>
+          <div class="ligne">➕ Le client complète : <strong>${formaterNombre(complement)} F</strong></div>
+          <div class="ligne">🎯 Ce qui fait : <strong>${formaterNombre(souhaite)} F</strong></div>
+          <div class="ligne">🏪 + Frais magasin : <strong>${formaterNombre(FRAIS_MAGASIN)} F</strong></div>
+          <div class="ligne total">🪙 Total à prendre au client : <strong style="font-size:22px">${formaterNombre(totalCash)} F</strong></div>
+        `;
+      }
+
+      document.getElementById('modeBadge').className = 'badge ' + (avecComplement ? 'complement' : 'simple');
+      document.getElementById('modeBadge').textContent = avecComplement ? '➕ Avec Complément' : '✅ Retrait Direct';
+
+      afficherResultats(montantALancer, complement, totalCash, montantDonne, message, false, null);
+      ajouterHistorique(solde, montantDonne, montantALancer, totalCash);
+    }
+
+    // ===== MODE 2 : Solde uniquement (souhaité vide) =====
+    function calculerModeRetraitTotal(solde) {
+      const fraisOp = solde * FRAIS_OPERATEUR;
+      const lancerTheo = solde - fraisOp;
+      const montantALancer = Math.floor(lancerTheo / ARRONDI) * ARRONDI;
+      const totalCash = FRAIS_MAGASIN;
+      const montantDonne = montantALancer;
+
+      const message = `
+        <div class="ligne">📱 Tu lances en retrait : <strong>${formaterNombre(montantALancer)} F</strong></div>
+        <div class="ligne">💵 Tu donnes au client : <strong>${formaterNombre(montantDonne)} F</strong></div>
+        <div class="ligne total">🏪 Frais magasin à prendre : <strong style="font-size:22px">${formaterNombre(FRAIS_MAGASIN)} F</strong></div>
+        <div class="ligne" style="font-size:12px; opacity:0.85; margin-top:8px;">💡 Si le client n'a pas 100 F en cash, donne-lui ${formaterNombre(montantDonne - FRAIS_MAGASIN)} F</div>
+      `;
+
+      document.getElementById('modeBadge').className = 'badge simple';
+      document.getElementById('modeBadge').textContent = '🌊 Retrait Total';
+
+      afficherResultats(montantALancer, 0, totalCash, montantDonne, message, false, null);
+      ajouterHistorique(solde, montantDonne, montantALancer, totalCash);
+    }
+
+    // ===== MODE 3 : Souhaité uniquement (solde vide) =====
+    function calculerModeInverse(souhaite) {
+      // Arrondir le souhaité à 50
+      const montantALancer = Math.floor(souhaite / ARRONDI) * ARRONDI;
+      // Frais 1% sur le montant à lancer
+      const fraisOp = Math.ceil(montantALancer * FRAIS_OPERATEUR);
+      // Solde nécessaire = lancer + frais
+      const soldeNecessaire = montantALancer + fraisOp;
+      const totalCash = FRAIS_MAGASIN;
+      const montantDonne = montantALancer;
+
+      const message = `
+        <div class="ligne">💰 Le client doit avoir sur son compte : <strong>${formaterNombre(soldeNecessaire)} F</strong></div>
+        <div class="ligne">📱 Tu lanceras en retrait : <strong>${formaterNombre(montantALancer)} F</strong></div>
+        <div class="ligne">💵 Tu donneras au client : <strong>${formaterNombre(montantDonne)} F</strong></div>
+        <div class="ligne total">🏪 Frais magasin à prendre : <strong style="font-size:22px">${formaterNombre(FRAIS_MAGASIN)} F</strong></div>
+      `;
+
+      document.getElementById('modeBadge').className = 'badge inverse';
+      document.getElementById('modeBadge').textContent = '🔄 Calcul Inverse';
+
+      afficherResultats(montantALancer, 0, totalCash, montantDonne, message, true, soldeNecessaire);
+      ajouterHistorique(soldeNecessaire, montantDonne, montantALancer, totalCash);
+    }
+
+    // ===== AFFICHAGE COMMUN =====
+    function afficherResultats(lancer, complement, cash, donne, message, modeInverse, soldeReq) {
+      document.getElementById('instructionMessage').innerHTML = message;
+      document.getElementById('resLancer').textContent = formaterNombre(lancer) + ' F';
+      document.getElementById('resComplete').textContent = formaterNombre(complement) + ' F';
+      document.getElementById('resCash').textContent = formaterNombre(cash) + ' F';
+      document.getElementById('resDonner').textContent = formaterNombre(donne) + ' F';
+
+      // Card complément : afficher uniquement si > 0
+      document.getElementById('cardComplete').style.display = complement > 0 ? 'block' : 'none';
+
+      // Card solde requis : afficher uniquement en mode inverse
+      if (modeInverse) {
+        document.getElementById('cardSoldeRequis').style.display = 'block';
+        document.getElementById('resSoldeRequis').textContent = formaterNombre(soldeReq) + ' F';
+      } else {
+        document.getElementById('cardSoldeRequis').style.display = 'none';
+      }
+
+      document.getElementById('instructionBox').classList.add('actif');
+      document.getElementById('sectionResultats').style.display = 'block';
+      document.getElementById('sectionBoutons').style.display = 'block';
+      document.getElementById('sectionHistorique').style.display = 'block';
+    }
+
+    // ===== HISTORIQUE =====
+    function ajouterHistorique(solde, souhaite, lancer, cash) {
+      const item = { timestamp: new Date(), solde, souhaite, lancer, cash };
+      if (historique[0] && historique[0].solde === solde && historique[0].souhaite === souhaite) {
+        historique[0] = item;
+      } else {
+        historique.unshift(item);
+        if (historique.length > 20) historique.pop();
+      }
+      sauvegarder();
+      afficherHistorique();
+    }
+
+    function afficherHistorique() {
+      const zone = document.getElementById('historiqueListe');
+      if (historique.length === 0) {
+        zone.innerHTML = '<div class="historique-vide">Aucun calcul pour l\'instant</div>';
+        return;
+      }
+      zone.innerHTML = historique.map((h, idx) => {
+        const heure = new Date(h.timestamp).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+        return `
+          <div class="historique-item">
+            <div class="item-haut">
+              <span><span class="item-solde">${formaterNombre(h.solde)} F</span> → <span class="item-souhaite">${formaterNombre(h.souhaite)} F</span></span>
+              <button class="btn-suppr-item" onclick="supprimerHistorique(${idx})">✕</button>
+            </div>
+            <div class="item-bas">
+              <span>📱 <span class="item-lancer">${formaterNombre(h.lancer)} F</span></span>
+              <span>🪙 <span class="item-cash">${formaterNombre(h.cash)} F</span></span>
+              <span>${heure}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function supprimerHistorique(idx) {
+      historique.splice(idx, 1);
+      sauvegarder();
+      afficherHistorique();
+    }
+
+    function effacerHistorique() {
+      if (confirm('Effacer tout l\'historique ?')) {
+        historique = [];
+        sauvegarder();
+        afficherHistorique();
+      }
+    }
+
+    function sauvegarder() {
+      try { localStorage.setItem('retrait_v8', JSON.stringify(historique)); } catch(e) {}
+    }
+
+    function charger() {
+      try {
+        const s = localStorage.getItem('retrait_v8');
+        if (s) { historique = JSON.parse(s); afficherHistorique(); }
+      } catch(e) {}
+    }
+
+    function copierTout() {
+      const lancer = document.getElementById('resLancer').textContent;
+      const complete = document.getElementById('resComplete').textContent;
+      const cash = document.getElementById('resCash').textContent;
+      const donner = document.getElementById('resDonner').textContent;
+      copier(`📱 Lancer : ${lancer}\n➕ Compléter : ${complete}\n🪙 Cash : ${cash}\n💵 Donner : ${donner}`);
+    }
+
+    function reinitialiser() {
+      document.getElementById('soldeClient').value = '';
+      document.getElementById('montantSouhaite').value = '';
+      cacherTout();
+      document.getElementById('soldeClient').focus();
+    }
+
+    window.addEventListener('load', charger);
+  </script>
+
+</body>
+</html>
